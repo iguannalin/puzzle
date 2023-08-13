@@ -21,21 +21,23 @@ function solve(grid, r, c) {
   let result = null;
 
   if (rowStr && dictionary[rowStr]) {
-    dictionary[rowStr].forEach((match) => {
+    for (let i = 0; i < dictionary[rowStr].length; i++) {
+      let match = dictionary[rowStr][i];
       if (dictionary[colStr].includes(colStr+match[match.length-1])) {
         grid[r] = match;
         let res = solve(grid, r, c+1);
         console.log('1', res);
         if (res) return res;
       }
-    });
+    }
   } else if (colStr && dictionary[colStr]) {
     console.log('2');
-    dictionary[colStr].forEach((match) => {
+    for (let i = 0; i < dictionary[colStr].length; i++) {
+      let match = dictionary[colStr][i];
       grid[r] = match[r];
       let res = solve(grid, r, c+1);
       if (res) return res;
-    });
+    }
   }
   return result;
 }
