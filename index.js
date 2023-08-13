@@ -17,11 +17,6 @@ window.addEventListener("load", () => {
     return dictionary[randomKey][getRandomInt(0, dictionary[randomKey].length)];
   }
 
-  function getMatches(target) {
-    if (target.length >= 4) return [];
-    return dictionary[target];
-  }
-
   function solve(grid, r, c) {
     console.log(grid);
     if (r < 3 && c > 3) { r += 1; c = 0 };
@@ -35,7 +30,7 @@ window.addEventListener("load", () => {
     if (rowStr && dictionary[rowStr]) {
       for (let i = 0; i < dictionary[rowStr].length; i++) {
         let match = dictionary[rowStr][i];
-        if (dictionary[colStr].includes(colStr+match[match.length-1])) {
+        if (dictionary[colStr]?.includes(colStr+match[match.length-1])) {
           grid[r] = match;
           let res = solve(grid, r, c+1);
           if (res) return res;
@@ -51,7 +46,6 @@ window.addEventListener("load", () => {
     }
     return result;
   }
-
 
   fetch("dictionary.json").then((f) => f.json()).then((r) => {
     dictionary = r;
