@@ -11,9 +11,8 @@ function getMatches(target) {
 }
 
 function solve(grid, r, c) {
-  console.log(grid)
   if (r < 3 && c > 3) { r += 1; c = 0 };
-  if (r == 3 && c > 3) { console.log('here'); return grid; }
+  if (r == 3 && c > 3) return grid;
   let rowStr = grid[r];
   let colStr = "";
   grid.forEach((row) => colStr += row[c] ? row[c] : "");
@@ -26,12 +25,10 @@ function solve(grid, r, c) {
       if (dictionary[colStr].includes(colStr+match[match.length-1])) {
         grid[r] = match;
         let res = solve(grid, r, c+1);
-        console.log('1', res);
         if (res) return res;
       }
     }
   } else if (colStr && dictionary[colStr]) {
-    console.log('2');
     for (let i = 0; i < dictionary[colStr].length; i++) {
       let match = dictionary[colStr][i];
       grid[r] = match[r];
@@ -45,5 +42,5 @@ function solve(grid, r, c) {
 
 fetch("dictionary.json").then((f) => f.json()).then((r) => {
   dictionary = r;
-  console.log('SOLVED ', solve(["abed","baba","ebbs",""], 3, 0));
+  console.log("SOLVED: ", solve(["abed","","",""], 1, 0));
 });
