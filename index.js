@@ -32,8 +32,8 @@ window.addEventListener("load", () => {
     grid.appendChild(tr);
   }
 
-  // // 4-letter words list scraped from https://eslforums.com/4-letter-words/
-  // fetch("https://annaylin.com/100-days/crossword/words.json").then((f) => f.json()).then((r) => {
-  //   rows.forEach((row) => initGrid(r, row));
-  // });
+  // 4-letter words list scraped from https://eslforums.com/4-letter-words/
+  fetch("https://annaylin.com/100-days/crossword/words.json").then((f) => f.json()).then((r) => {
+    rows.forEach((row) => initGrid(r, row));
+  });
 });

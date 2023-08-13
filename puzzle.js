@@ -36,8 +36,11 @@ function getRandomMatch(listA, listB) { // at least one of the lists must not be
   return getRandomWord(null, shorterList.filter((item) => longerList.includes(item)));
 }
 
+// solve goes through the 4x4 grid column by column, filling column first before row
 function solve(grid, rowIndex, colIndex) {
-  if (rowIndex > 3 || colIndex > 3) return grid;
+  const newGrid = grid;
+  console.log({grid, rowIndex, colIndex});
+  if (rowIndex > 3 && colIndex > 3) return grid;
   // find substring of everything in row
   let rowString = grid[rowIndex].join("");
   // find substring of everything in column
@@ -48,14 +51,16 @@ function solve(grid, rowIndex, colIndex) {
   // find words that begin with column substring
   let colMatches = getMatches(colString);
   let match = getRandomMatch(rowMatches, colMatches);
+  if (!match) return solve(grid, rowIndex > 0 ? rowIndex - 1 : 0, colIndex > 0 ? colIndex - 1 : 0);
   // make match
-  grid[rowIndex][colIndex] = match[rowIndex];
+  match.split("").forEach((ch, index) => {
+    newGrid[index][colIndex] = ch;
+  });
   if (rowIndex < 3) rowIndex +=1;
   if (colIndex < 3) colIndex += 1;
   if (colIndex == 3) colIndex = 0;
-  console.log({grid, match});
   // recurse solve()
-  return solve(grid, rowIndex, colIndex);
+  return solve(newGrid, rowIndex, colIndex);
 }
 
 // 4-letter words list scraped from https://eslforums.com/4-letter-words/
@@ -64,5 +69,5 @@ fetch("https://annaylin.com/100-days/crossword/words.json").then((f) => f.json()
   let grid = [["","","",""],["","","",""],["","","",""],["","","",""]]; // 4x4 grid
   const word = getRandomWord(words);
   grid[0] = word.split("");
-  solve(grid, 1, 0);
+  // console.log("SOLVED: ", solve(grid, 1, 0));
 });
