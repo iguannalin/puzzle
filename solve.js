@@ -5,12 +5,24 @@
 
 let dictionary = {};
 
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
+}
+
+function getRandomWord() {
+  const randomKey = Object.keys(dictionary)[getRandomInt(0, Object.keys(dictionary).length)];
+  return dictionary[randomKey][getRandomInt(0, dictionary[randomKey].length)];
+}
+
 function getMatches(target) {
   if (target.length >= 4) return [];
   return dictionary[target];
 }
 
 function solve(grid, r, c) {
+  console.log(grid);
   if (r < 3 && c > 3) { r += 1; c = 0 };
   if (r == 3 && c > 3) return grid;
   let rowStr = grid[r];
@@ -42,5 +54,7 @@ function solve(grid, r, c) {
 
 fetch("dictionary.json").then((f) => f.json()).then((r) => {
   dictionary = r;
-  console.log("SOLVED: ", solve(["abed","","",""], 1, 0));
+  let starter = "";
+  while (starter.length != 4) starter = getRandomWord();
+  console.log("SOLVED: ", solve([starter,"","",""], 1, 0));
 });
