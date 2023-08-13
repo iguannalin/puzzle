@@ -3,51 +3,45 @@
 // find matches for row col
 // for each match, validate if exists in dictionary with row and col
 
+let dictionary = {};
+
+function getMatches(target) {
+  if (target.length >= 4) return [];
+  return dictionary[target];
+}
+
 function solve(grid, r, c) {
-  if (r >= 3 && c >= 3) return grid;
-  if (r < 3 && c > 3) c = 0;
+  console.log(grid)
+  if (r < 3 && c > 3) { r += 1; c = 0 };
+  if (r == 3 && c > 3) { console.log('here'); return grid; }
   let rowStr = grid[r];
-  let colStr = grid[r].map((row) => row[c] ? row[c] : "");
-  console.log({rowStr, colStr});
+  let colStr = "";
+  grid.forEach((row) => colStr += row[c] ? row[c] : "");
 
-  // solve(grid, r+1, c+1);
+  let result = null;
+
+  if (rowStr && dictionary[rowStr]) {
+    dictionary[rowStr].forEach((match) => {
+      if (dictionary[colStr].includes(colStr+match[match.length-1])) {
+        grid[r] = match;
+        let res = solve(grid, r, c+1);
+        console.log('1', res);
+        if (res) return res;
+      }
+    });
+  } else if (colStr && dictionary[colStr]) {
+    console.log('2');
+    dictionary[colStr].forEach((match) => {
+      grid[r] = match[r];
+      let res = solve(grid, r, c+1);
+      if (res) return res;
+    });
+  }
+  return result;
 }
 
-solve(["abed","baba","ebbs",""], 0, 0);
 
-// solve goes through the 4x4 grid column by column, filling column first before row
-function resolve(grid, rowIndex, colIndex) {
-  if (rowIndex >= 3 && colIndex >= 3) return grid; // edge case
-  else if (rowIndex < 3 && colIndex > 3) { rowIndex += 1; colIndex = 0; }
-  if (rowIndex >= grid.length-1) grid[rowIndex] = "";
-  
-  // find substring of everything in row
-  let rowString = grid[rowIndex].substring(0, colIndex);
-  // find substring of everything in column
-  let colString = "";
-  for (let j = rowIndex; j >= 0; j--) colString += grid[j][colIndex] ? grid[j][colIndex] : "";
-  
-  // find words that begin with row substring
-  let rowMatches = getMatches(rowString);
-  // find words that begin with column substring
-  let colMatches = getMatches(colString);
-  
-  let allMatches = combineMatches(rowMatches, colMatches);
-
-  // console.log({grid, rowIndex, colIndex, allMatches});
-  allMatches.forEach((match) => {
-    grid[rowIndex] = match[rowIndex];
-    // console.log(grid)
-    // const result = solve(grid, rowIndex, colIndex+1);
-    // if (result) return result;
-  });
-  return null;
-  // let match = getRandomMatch(rowMatches, colMatches);
-  // if (!match) return solve(grid, rowIndex > 0 ? rowIndex - 1 : 0, colIndex > 0 ? colIndex - 1 : 0);
-  // // make match
-  // match.split("").forEach((ch, index) => {
-  //   newGrid[index][colIndex] = ch;
-  // });
-  // // recurse solve()
-  // return solve(grid, rowIndex, colIndex);
-}
+fetch("dictionary.json").then((f) => f.json()).then((r) => {
+  dictionary = r;
+  console.log('SOLVED ', solve(["abed","baba","ebbs",""], 3, 0));
+});
