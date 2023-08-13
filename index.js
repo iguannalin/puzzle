@@ -18,7 +18,6 @@ window.addEventListener("load", () => {
   }
 
   function solve(grid, r, c) {
-    console.log(grid);
     if (r < 3 && c > 3) { r += 1; c = 0 };
     if (r == 3 && c > 3) return grid;
     let rowStr = grid[r];
@@ -47,10 +46,16 @@ window.addEventListener("load", () => {
     return result;
   }
 
-  fetch("dictionary.json").then((f) => f.json()).then((r) => {
-    dictionary = r;
+  function getPuzzle() {
     let starter = "";
     while (starter.length != 4) starter = getRandomWord();
-    console.log("SOLVED: ", solve([starter,"","",""], 1, 0));
+    return solve([starter,"","",""], 1, 0);
+  }
+
+  fetch("dictionary.json").then((f) => f.json()).then((r) => {
+    dictionary = r;
+    let puzzle = getPuzzle();
+    while (!puzzle) puzzle = getPuzzle();
+    console.log("Solved: ", puzzle);
   });
 });
