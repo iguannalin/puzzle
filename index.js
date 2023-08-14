@@ -61,13 +61,14 @@ window.addEventListener("load", () => {
 
   const grid = document.getElementById("grid");
   function initGrid(puzzle) {
+    const chance = (Math.random() > 0.5);
     for (let i = 0; i < 4; i++) {
       const tr = document.createElement("tr");
       puzzle[i].split("").forEach((letter, j) => {
         const td = document.createElement("td");
-        if ((Math.random() > 0.5) && (i == 0 && j == 0) || (i == 1 && j == 1) || (i == 2 && j == 2) || (i == 3 && j == 3)) {
+        if (chance && ((i == 0 && j == 0) || (i == 1 && j == 1) || (i == 2 && j == 2) || (i == 3 && j == 3))) {
           td.innerHTML = letter;
-        } else if ((i == 0 && j == 0) || (i == 0 && j == 3) || (i == 3 && j == 0) || (i == 3 && j == 3)) {
+        } else if (!chance && ((i == 0 && j == 0) || (i == 0 && j == 3) || (i == 3 && j == 0) || (i == 3 && j == 3))) {
           td.innerHTML = letter;
         } else {
           td.innerHTML = `<input type='text' id=${i}-${j} maxlength='1'></input>`;
@@ -83,15 +84,16 @@ window.addEventListener("load", () => {
     dictionary = r;
     let count = 0; // for the really bad luck
     puzzle = getPuzzle();
-    while ((!puzzle || puzzle[3][3].length < 4) && count < 25) {
+    while ((!puzzle || puzzle[3]?.length < 4) && count < 25) {
       puzzle = getPuzzle();
       count++;
     }
     if (puzzle) {
       initGrid(puzzle);
     } else {
-      const p = document.createElement("tr");
+      const p = document.createElement("a");
       p.innerHTML = "refresh";
+      p.href = "javascript:window.location.reload(true);";
       grid.appendChild(p);
     }
     console.log("Solved: ", puzzle, count);

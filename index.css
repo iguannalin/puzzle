@@ -49,7 +49,7 @@ td input {
   background-color: transparent;
 }
 
-td, td input {
+td, td input, a {
   vertical-align: middle;
   color: #f9faffde;
   text-shadow: #858ebc -2px 2px 8px;
