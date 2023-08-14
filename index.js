@@ -94,7 +94,7 @@ window.addEventListener("load", () => {
       const p = document.createElement("a");
       p.innerHTML = "refresh";
       p.href = "javascript:window.location.reload(true);";
-      grid.appendChild(p);
+      document.getElementById("container").appendChild(p);
     }
     console.log("Solved: ", puzzle, count);
   });
