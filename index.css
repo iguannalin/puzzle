@@ -50,6 +50,7 @@ td input {
 }
 
 td, td input {
+  vertical-align: middle;
   color: #f9faffde;
   text-shadow: #858ebc -2px 2px 8px;
   font-size: 36px;
@@ -59,4 +60,9 @@ td, td input {
 
 td input:focus {
   outline: none;
+}
+
+td input.red {
+  color: #df1d48;
+  text-shadow: #61636e -2px 2px 8px;
 }

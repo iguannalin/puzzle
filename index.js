@@ -5,6 +5,7 @@ window.addEventListener("load", () => {
   // for each match, validate if exists in dictionary with row and col
 
   let dictionary = {};
+  let puzzle;
 
   function getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -52,13 +53,24 @@ window.addEventListener("load", () => {
     return solve([starter,"","",""], 1, 0);
   }
 
+  function onType(e) {
+    let [r, c] = e.target.id.split("-");
+    if (e.target.value && e.target.value != puzzle[r][c]) e.target.classList = "red";
+    else e.target.classList.remove("red");
+  }
+
   function initGrid(puzzle) {
     const grid = document.getElementById("grid");
     for (let i = 0; i < 4; i++) {
       const tr = document.createElement("tr");
-      puzzle[i].split("").forEach((letter) => {
+      puzzle[i].split("").forEach((letter, j) => {
         const td = document.createElement("td");
-        td.innerHTML = letter;
+        if ((i == 0 && j == 0) || (i == 1 && j == 1) || (i == 2 && j == 2) || (i == 3 && j == 3)) {
+          td.innerHTML = letter;
+        } else {
+          td.innerHTML = `<input type='text' id=${i}-${j} maxlength='1'></input>`;
+          td.oninput = onType;
+        }
         tr.appendChild(td);
       })
       grid.appendChild(tr);
@@ -68,8 +80,8 @@ window.addEventListener("load", () => {
   fetch("dictionary.json").then((f) => f.json()).then((r) => {
     dictionary = r;
     let count = 0; // for the really bad luck
-    let puzzle = getPuzzle();
-    while (!puzzle && count < 15) {
+    puzzle = getPuzzle();
+    while ((!puzzle || puzzle[3][3].length < 4) && count < 25) {
       puzzle = getPuzzle();
       count++;
     }
