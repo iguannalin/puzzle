@@ -59,13 +59,15 @@ window.addEventListener("load", () => {
     else e.target.classList.remove("red");
   }
 
+  const grid = document.getElementById("grid");
   function initGrid(puzzle) {
-    const grid = document.getElementById("grid");
     for (let i = 0; i < 4; i++) {
       const tr = document.createElement("tr");
       puzzle[i].split("").forEach((letter, j) => {
         const td = document.createElement("td");
-        if ((i == 0 && j == 0) || (i == 1 && j == 1) || (i == 2 && j == 2) || (i == 3 && j == 3)) {
+        if ((Math.random() > 0.5) && (i == 0 && j == 0) || (i == 1 && j == 1) || (i == 2 && j == 2) || (i == 3 && j == 3)) {
+          td.innerHTML = letter;
+        } else if ((i == 0 && j == 0) || (i == 0 && j == 3) || (i == 3 && j == 0) || (i == 3 && j == 3)) {
           td.innerHTML = letter;
         } else {
           td.innerHTML = `<input type='text' id=${i}-${j} maxlength='1'></input>`;
@@ -87,6 +89,10 @@ window.addEventListener("load", () => {
     }
     if (puzzle) {
       initGrid(puzzle);
+    } else {
+      const p = document.createElement("tr");
+      p.innerHTML = "refresh";
+      grid.appendChild(p);
     }
     console.log("Solved: ", puzzle, count);
   });
