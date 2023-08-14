@@ -52,10 +52,30 @@ window.addEventListener("load", () => {
     return solve([starter,"","",""], 1, 0);
   }
 
+  function initGrid(puzzle) {
+    const grid = document.getElementById("grid");
+    for (let i = 0; i < 4; i++) {
+      const tr = document.createElement("tr");
+      puzzle[i].split("").forEach((letter) => {
+        const td = document.createElement("td");
+        td.innerHTML = letter;
+        tr.appendChild(td);
+      })
+      grid.appendChild(tr);
+    }
+  }
+
   fetch("dictionary.json").then((f) => f.json()).then((r) => {
     dictionary = r;
+    let count = 0; // for the really bad luck
     let puzzle = getPuzzle();
-    while (!puzzle) puzzle = getPuzzle();
-    console.log("Solved: ", puzzle);
+    while (!puzzle && count < 15) {
+      puzzle = getPuzzle();
+      count++;
+    }
+    if (puzzle) {
+      initGrid(puzzle);
+    }
+    console.log("Solved: ", puzzle, count);
   });
 });
